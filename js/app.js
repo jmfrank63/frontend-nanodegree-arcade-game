@@ -3,6 +3,7 @@
 // levels goodies to collect princesses to be freed
 // but I never liked arcade games so I tried to keep
 // the code as small as possible
+//
 // Enemies our player must avoid
 var Enemy = function(x, y, sprite, speed) {
     // Variables applied to each of our instances go here,
