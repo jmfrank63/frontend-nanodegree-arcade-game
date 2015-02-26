@@ -4,8 +4,19 @@
 // but I never liked arcade games so I tried to keep
 // the code as small as possible
 //
+
+// Helper function to choose on arbitrary object out of a given array
+function randomChoice(arr) {
+    "use strict";
+    return arr[Math.floor(arr.length * Math.random())];
+}
+
+// create an empty array of players
+var allEnemies = [];
+
 // Enemies our player must avoid
 var Enemy = function(x, y, sprite, speed) {
+    "use strict";
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -15,24 +26,27 @@ var Enemy = function(x, y, sprite, speed) {
     this.x = x;
     this.y = y;
     this.speed = speed;
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    "use strict";
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x + this.speed*dt;
-}
+    this.x = this.x + this.speed * dt;
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    "use strict";
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Player class is derived from enemy class
 var Player = function(x, y, sprite) {
+    "use strict";
     Enemy.call(this, x, y, sprite);
 };
 
@@ -47,10 +61,12 @@ Player.prototype.constructor = Player;
 // So this functions looks for enemies and creates them if there
 // aren't enought of them or removes them if they are off screen
 // The function tests for collision or drops in the river as well
+// New enemies are created inside the update function of the player
 Player.prototype.update = function() {
+    "use strict";
     // check if enemies did leave the screen on the right side
     // remove them if off screen
-    for (var i=0; i < allEnemies.length; i++) {
+    for (var i = 0; i < allEnemies.length; i++) {
         if (allEnemies[i].x > 500) {
             allEnemies.splice(i, 1);
         }
@@ -68,8 +84,8 @@ Player.prototype.update = function() {
         // bugs start left off screen at -100 and can be in one of three rows
         // at positions 63, 145 or 230
         // bugs have a random speed between 50 and 200
-        allEnemies.push(new Enemy(-100, randomChoice([63, 145, 230]), 
-                                  'images/enemy-bug.png', 
+        allEnemies.push(new Enemy(-100, randomChoice([63, 145, 230]),
+                                  "images/enemy-bug.png",
                                   Math.random() * 150 + 50));
     }
 };
@@ -77,33 +93,35 @@ Player.prototype.update = function() {
 // does nothing else putting the player back to the starting position
 // the game runs continiously and resets only the player
 Player.prototype.reset = function() {
+    "use strict";
     this.x = 200;
     this.y = 390;
 };
 
-// moves the player tile by tile and ignores 
+// moves the player tile by tile and ignores
 // movements out of the screen
 // for only for cases switch case is still ok
 // for more cases object lookup should be considered
 // as switch case has O(n) while lookup has O(1)
 Player.prototype.handleInput = function(direction) {
+    "use strict";
     switch (direction) {
-        case 'left':
+        case "left":
             if (this.x > 0){
                 this.x -= 101;
             }
             break;
-        case 'right':
+        case "right":
             if (this.x < 400){
                 this.x += 101;
             }
             break;
-        case 'up':
+        case "up":
             if (this.y > 0){
                 this.y -= 83;
             }
             break;
-        case 'down':
+        case "down":
             if (this.y < 390){
                 this.y += 83;
             }
@@ -120,37 +138,29 @@ Player.prototype.handleInput = function(direction) {
 // we better take advantage of the grid only checking
 // objects in the tiles adjacent to the object in question
 Player.prototype.collision = function() {
-    for (var i=0; i < allEnemies.length; i++) {
-        if (Math.abs(allEnemies[i].y - this.y) < 42 && 
-            Math.abs(allEnemies[i].x - this.x) < 80) {
+    "use strict";
+    for (var i = 0; i < allEnemies.length; i++) {
+        if (Math.abs( allEnemies[i].y - this.y) < 42 &&
+            Math.abs( allEnemies[i].x - this.x) < 80) {
                 return true;
             }
     }
     return false;
-}
+};
 
 // create the player
-var player = new Player(200, 390, 'images/char-boy.png');
-
-// create an empty array of players
-var allEnemies = [];
-
-// new enemies are created inside the update function of the player
+var player = new Player(200, 390, "images/char-boy.png");
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+document.addEventListener("keyup", function(e) {
+    "use strict";
     var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
+        37: "left",
+        38: "up",
+        39: "right",
+        40: "down"
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-// choose on arbitrary object out of a given array
-function randomChoice(arr) {
-    return arr[Math.floor(arr.length * Math.random())];
-};
